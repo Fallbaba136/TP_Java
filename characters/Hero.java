@@ -1,0 +1,122 @@
+package lsg.characters;
+
+import lsg.armor.ArmorItem;
+import lsg.armor.DragonSlayerLeggings;
+import lsg.armor.RingedKnightArmor;
+import lsg.helper.Dice;
+import lsg.weapons.Weapon;
+
+//class Hero
+public class Hero extends Character
+{
+    public static final int MAX_ARMOR_PIECES = 3;
+    //Tableau d'armure
+    ArmorItem[] armor = new ArmorItem[MAX_ARMOR_PIECES];
+
+    
+    // 1.3 constructeurs 
+    public Hero(String name, int life, int stamina)  { 
+        this.name = name;
+        this.life = life;
+        this.stamina = stamina;
+    }
+    public Hero() {super();}
+
+    //Methodes 
+    public int attackWith(Weapon weapon)
+    {
+        if(weapon.isBroken()) return 0;
+        else
+        {
+            Dice d = new Dice(101);
+           float precision = (float)d.roll() / 100;
+            int amplitude = weapon.getMaxDamage() - weapon.getMinDamage();
+            int bonus = Math.round(amplitude * precision);
+            int degat = weapon.getMinDamage() + bonus;
+            return degat;
+        }
+
+    }
+
+    public void setArmoItem(ArmorItem piece_armure, int slot){
+        if(slot < 1 || slot > MAX_ARMOR_PIECES)
+        {
+            return;
+        }
+        else{
+                armor[slot-1] = piece_armure;
+        } 
+    }
+
+    public float getTotalArmor(){
+        float compteur = 0;
+         for(int i = 0; i < armor.length; i++){
+            ArmorItem a = armor[i];
+            if(a != null){
+                compteur += armor[i].getArmorValue();
+            }
+         }
+         return compteur;
+    }
+
+    public String armorToString(){
+
+    String s1 = (armor[0] != null) ? armor[0].toString() : "empty";
+    String s2 = (armor[1] != null) ? armor[1].toString() : "empty";
+    String s3 = (armor[2] != null) ? armor[2].toString() : "empty";
+
+    return String.format(
+        "ARMOR   1:%s   2:%s   3:%s TOTAL:%.2f",
+        s1,
+        s2,
+        s3,
+        getTotalArmor()
+    );
+}
+
+    public ArmorItem[] getArmorItems(){
+
+        // compter les piéces équipées
+        int count = 0;
+        for(int i = 0; i < armor.length; i++)
+        {
+            ArmorItem a = armor[i];
+            if(a != null){ count++;}
+        }
+
+        // crée le tableau résultat à la bonne taille
+        ArmorItem[] armure = new ArmorItem[count];
+
+        int index = 0;
+        for(int i = 0; i < armor.length; i++){
+            if (armor[i] != null) {
+                armure[index] = armor[i];
+                index++;
+            }
+        }
+        return armure;
+    }
+
+    @Override
+    float computeProtection(){
+        return getTotalArmor();
+    }
+}
+
+
+class Main {
+     public static void main(String[] args){
+          Hero hero = new Hero("Gregooninator", 100, 50);
+          
+          //Equiper (slots numérotés à partir de 1)
+          hero.setArmoItem(new DragonSlayerLeggings(), 1);
+          hero.setArmoItem(new RingedKnightArmor(), 3);
+
+          // Afficher statistiques d'armure
+          System.out.println(hero.armorToString());
+          System.out.println("\n");
+          System.out.println("Piéces equipees: " + hero.getArmorItems().length );
+          System.out.println(hero);
+     }
+}
+ 
