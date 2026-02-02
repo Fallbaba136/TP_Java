@@ -31,27 +31,12 @@ public class Monster extends Character{
         maxStamina = 10; // force maximal
     }
 
-public int attackWith(Weapon weapon)
-    {
-        if(weapon.isBroken()) return 0;
-        else
-        {
-            Dice d = new Dice(101);
-           float precision = (float)d.roll() / 100;
-            int amplitude = weapon.getMaxDamage() - weapon.getMinDamage();
-            int bonus = Math.round(amplitude * precision);
-            int degat = weapon.getMinDamage() + bonus;
-            return degat;
-        }
-
-    }
 
     @Override
      float computeProtection(){
         return skinThickness;
     }
 
-  
-    }
+  }
    
 }
