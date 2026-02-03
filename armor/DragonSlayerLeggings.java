@@ -10,7 +10,6 @@ public class DragonSlayerLeggings extends ArmorItem{
 
 class Main {
     public static void main(String[] args) {
-        ArmorItem A1 = new DragonSlayerLeggings();
-        System.out.println(A1);
+        System.out.println(new DragonSlayerLeggings());
     }
 }

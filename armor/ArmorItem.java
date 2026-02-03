@@ -2,8 +2,8 @@ package lsg.armor;
 
 public class ArmorItem {
     // attributs
-    protected String name;
-    protected float armorValue;
+    protected String name; //nom de la pièce
+    protected float armorValue; // valeur d'armure de l'item
 
     // Constructeur
     public ArmorItem(String name, float armorValue){

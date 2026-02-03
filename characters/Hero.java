@@ -1,11 +1,12 @@
 package lsg.characters;
 
-import lsg.armor.ArmorItem;
-import lsg.armor.DragonSlayerLeggings;
-import lsg.armor.RingedKnightArmor;
-import lsg.helper.Dice;
-import lsg.weapons.Weapon;
-
+import lsg.characters.Character;
+import lsg.characters.Hero;
+import lsg.characters.Monster;
+import lsg.weapons.Sword;
+import lsg.weapons.*;
+import lsg.armor.*;
+import lsg.helper.*;;
 //class Hero
 public class Hero extends Character
 {
@@ -15,12 +16,9 @@ public class Hero extends Character
 
     
     // 1.3 constructeurs 
-    public Hero(String name, int life, int stamina)  { 
-        this.name = name;
-        this.life = life;
-        this.stamina = stamina;
+    public Hero(String name)  { 
+        super(name);
     }
-    public Hero() {super();}
 
     //Methodes 
     public int attackWith(Weapon weapon)
@@ -97,26 +95,17 @@ public class Hero extends Character
         return armure;
     }
 
-    @Override
-    float computeProtection(){
-        return getTotalArmor();
+    //@Override
+   // float computeProtection(){
+     //   return getTotalArmor();
+    //}
+
+
+
+
+
+     public static void main(String[] args){
+         System.out.println(new Hero("xx").armorToString());
     }
 }
 
-
-class Main {
-     public static void main(String[] args){
-          Hero hero = new Hero("Gregooninator", 100, 50);
-          
-          //Equiper (slots numérotés à partir de 1)
-          hero.setArmoItem(new DragonSlayerLeggings(), 1);
-          hero.setArmoItem(new RingedKnightArmor(), 3);
-
-          // Afficher statistiques d'armure
-          System.out.println(hero.armorToString());
-          System.out.println("\n");
-          System.out.println("Piéces equipees: " + hero.getArmorItems().length );
-          System.out.println(hero);
-     }
-}
- 

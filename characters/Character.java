@@ -8,7 +8,7 @@ import java.math.*;
 
 
 
-abstract class Character {
+public class Character {
     // Message possible pour l'affichage
     private static String MSG_ALIVE = "(ALIVE)";
     private static String MSG_DEAD = "(DEAD)";
@@ -37,8 +37,6 @@ abstract class Character {
     public int getMaxLife(){  return maxLife;}
     public void setMaxLife(int maxLife){ this.maxLife = maxLife; }
 
-    public int getStamina(){ return stamina;}
-     public void setStamina(int stamina){ this.stamina = stamina;}
 
     public int getMaxStamina(){  return maxStamina;}
     public void setMaxStamina(int maxStamina){  this.maxStamina = maxStamina;}
@@ -46,10 +44,16 @@ abstract class Character {
     public Weapon getWeapon(){return weapon;}
     public void setWeapon(Weapon weapon){this.weapon = weapon;}
 
+    
+    public int getStamina(){ return stamina;}
+    public void setStamina(int stamina){ this.stamina = stamina;}
+
     // -----------------------------------------
     //      CONSTRUCTEURS
     // -----------------------------------------
-    public Character(String name)  { this.name = name;}
+    public Character(String name)  {
+         this.name = name; 
+        }
     public Character() {name = "Gregooninator";}
 
 
@@ -65,7 +69,7 @@ abstract class Character {
         name,
         life,
         stamina,
-        computeProtection(),
+        //computeProtection(),
         Alive_Dead()
     );
 }
@@ -126,7 +130,7 @@ public int attackWith(Weapon weapon)
 
     /*L'erreur est :*/
     /*Les classes concrètes n'implémentent pas toutes les méthodes abstraites héritée */
-    abstract float computeProtection();
+    //abstract float computeProtection();
     public int getHitWith(int value){
        int life = getLife();
        int dmg;
