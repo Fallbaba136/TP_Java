@@ -1,5 +1,6 @@
 package lsg.characters;
 import lsg.weapons.*;
+import lsg.buffs.talismans.Talisman;
 import lsg.helper.Dice;
 import lsg.weapons.Weapon;
 import java.math.*;
@@ -7,7 +8,10 @@ import java.math.*;
 public class Monster extends Character{
     // Attributs
     public static int INSTANCES_COUNT = 0;
-    private float skinThickness = 20;
+    protected float skinThickness = 20;
+    private Talisman talisman;
+
+    public void setTalisman(Talisman talisman){ this.talisman = talisman;}
 
     // accesseurs
     public float getSkinThickness(){return skinThickness;}
@@ -33,10 +37,15 @@ public class Monster extends Character{
 
 
     @Override
-     float computeProtection(){
+     public float computeProtection(){
         return skinThickness;
     }
+    public float computeBuff(){
+        if (talisman == null) {
+            return 0;
+        }
+        return talisman.computeBuffValue();
 
-  }
+    }
    
 }

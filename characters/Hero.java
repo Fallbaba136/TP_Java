@@ -3,10 +3,11 @@ package lsg.characters;
 import lsg.characters.Character;
 import lsg.characters.Hero;
 import lsg.characters.Monster;
-import lsg.weapons.Sword;
 import lsg.weapons.*;
 import lsg.armor.*;
-import lsg.helper.*;;
+import lsg.helper.*;
+import lsg.buffs.*;
+import lsg.buffs.rings.*;
 //class Hero
 public class Hero extends Character
 {
@@ -19,6 +20,42 @@ public class Hero extends Character
     public Hero(String name)  { 
         super(name);
     }
+
+    public Hero(){
+        name = "Gregoonitoor";
+    }
+
+    Ring[] rings = new Ring[2];
+
+    public Ring[] getRing(){
+        return rings;
+    }
+
+    public void setRing(Ring ring, int slot) {
+    if (slot < 1 || slot > 2) {
+        return;
+    }
+
+    int index = slot - 1;
+
+    // 1) détacher l’ancienne bague si elle existe
+    if (rings[index] != null) {
+        rings[index].setHero(null);
+    }
+
+    // 2) si on veut retirer la bague → vider le slot et terminer
+    if (ring == null) {
+        rings[index] = null;
+        return;
+    }
+
+    // 3) attacher la nouvelle bague au héros
+    ring.setHero(this);
+
+    // 4) mettre la bague dans le slot
+    rings[index] = ring;
+}
+
 
     //Methodes 
     public int attackWith(Weapon weapon)
@@ -95,11 +132,20 @@ public class Hero extends Character
         return armure;
     }
 
-    //@Override
-   // float computeProtection(){
-     //   return getTotalArmor();
-    //}
+    @Override
+    public float computeProtection(){
+        return getTotalArmor();
+    }
 
+    public float computeBuff(){
+        float compteur = 0;
+        for(int i = 0; i < rings.length; i++){
+            if (rings[i] != null) {
+                compteur += rings[i].computeBuffValue();
+            }
+        }
+        return compteur;
+    }
 
 
 

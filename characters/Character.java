@@ -8,7 +8,7 @@ import java.math.*;
 
 
 
-public class Character {
+public abstract class Character {
     // Message possible pour l'affichage
     private static String MSG_ALIVE = "(ALIVE)";
     private static String MSG_DEAD = "(DEAD)";
@@ -64,13 +64,14 @@ public class Character {
     public String toString() {
     return String.format(
         Locale.US,
-        "[%-10s] %-20s LIFE: %-5d STAMINA: %-5d PROTECTION: %.2f (%s)",
+        "[%-10s] %-20s LIFE: %-5d STAMINA: %-5d PROTECTION: %.2f (%s), BUFF: %f",
         getClass().getSimpleName(),
         name,
         life,
         stamina,
-        //computeProtection(),
-        Alive_Dead()
+        computeProtection(),
+        Alive_Dead(),
+        computeBuff()
     );
 }
     // Si le personnage est encore en vie 
@@ -101,30 +102,36 @@ public class Character {
         return attackWith(this.getWeapon());
     }
 
-    
-public int attackWith(Weapon weapon)
-    {
-        int min = weapon.getMinDamage();
-        int max = weapon.getMaxDamage();
-        int cost = weapon.getStamCost();
-    
-        int attack = 0;
+ public int attackWith(Weapon weapon) {
+    int min = weapon.getMinDamage();
+    int max = weapon.getMaxDamage();
+    int cost = weapon.getStamCost();
 
-        if(!weapon.isBroken()){
-        attack = min + Math.round((max-min) * dice101.roll() / 100.f);
+    int attack = 0;
+
+    if (!weapon.isBroken()) {
+        // 1) dégâts de base
+        attack = min + Math.round((max - min) * dice101.roll() / 100.f);
+
+        // 2) gestion stamina (ton ancien mécanisme)
         int stam = getStamina();
-        if (cost <=  stam) { // il y a assez stam pour lancer l'attaque
-        setStamina(getStamina()-cost);}
-        
-        else
-        {
-           attack = Math.round(attack * ((float)stam / cost));
-           setStamina(0);
+        if (cost <= stam) {
+            setStamina(stam - cost);
+        } else {
+            attack = Math.round(attack * ((float) stam / cost));
+            setStamina(0);
         }
+
         weapon.use();
+
+        // 3) appliquer le buff APRÈS ajustement stamina
+        float buffTotal = computeBuff(); // (ou le nom exact que tu as choisi)
+        attack = Math.round(attack * (1f + buffTotal / 100f));
     }
+
     return attack;
-    }
+}
+
 
     /*On peut pas déclarée une méthode abstraite dans une classe qui n'est pas elle même abstraite*/
 
@@ -132,10 +139,36 @@ public int attackWith(Weapon weapon)
     /*Les classes concrètes n'implémentent pas toutes les méthodes abstraites héritée */
     //abstract float computeProtection();
     public int getHitWith(int value){
-       int life = getLife();
-       int dmg;
-       dmg = (life > value) ? value : life;
-       setLife(life - dmg);
-       return dmg;
-       }
+         int currentLife = getLife();
+
+    // Sécurité : si déjà mort ou si dégâts <= 0
+    if (currentLife <= 0 || value <= 0) {
+        return 0;
+    }
+        float protection = computeProtection();
+        if (protection >= 100f) {
+            return 0;
+        }
+        // combien de pourcent passe ?
+        float pourcentagePassant = 100f - protection;
+
+        // convertion en facteur 
+
+        float facteur = value * pourcentagePassant / 100f;
+
+        // Appliqué aux degats
+        int dommageReal = Math.round(facteur);
+        
+        //On ne peut pas prendre plus de vie qu'il n'en reste 
+        dommageReal = Math.min(dommageReal, life);
+
+        life -= dommageReal;
+
+        return dommageReal;
+
+
+    }
+
+       public abstract float computeProtection();
+       public abstract float computeBuff();
 }
