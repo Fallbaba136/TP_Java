@@ -1,7 +1,6 @@
 package lsg.characters;
 
 import lsg.characters.Character;
-import lsg.characters.Hero;
 import lsg.characters.Monster;
 import lsg.weapons.*;
 import lsg.armor.*;
