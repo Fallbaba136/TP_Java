@@ -1,6 +1,7 @@
 package lsg.weapons;
 import lsg.helper.*;
 import java.math.*;
+import lsg.consumables.repair.*;
 //import lsg.characters.*;
 
 public class Weapon 
@@ -11,6 +12,12 @@ public class Weapon
     protected int maxDamage;
     protected int stamCost;
     protected int durability;
+
+    public static final String DURABILITY_STAT_STRING = "DURABILITY";
+
+
+
+    
 
     //constructeurs
     public Weapon(String name, int minDamage, int maxDamage, int stamCost, int durability)
@@ -34,7 +41,9 @@ public class Weapon
     public void setMaxDamage(int maxDamage){this.maxDamage = maxDamage;}
 
     // les methodes 
-    public void use() {durability -= 1;}
+    public void use() {
+        durability -= 1;
+    }
 
     public Boolean isBroken()
     {
@@ -44,14 +53,19 @@ public class Weapon
     public String toString()
     {
          return String.format(
-        "[%-10s] %-20s min: %-5d max: : %-5d stam: %-5d dur: %-5d",
+        "[%-10s] %-20s min: %-5d max: : %-5d stam: %-5d %s: %-5d",
         getClass().getSimpleName(),
         name,
         minDamage,
         maxDamage,
         stamCost,
-        durability
+       DURABILITY_STAT_STRING, durability
     );
+    }
+
+    public void repairWith(RepairKit kit){
+        int reparation = kit.use();
+        durability += reparation;
     }
 
     //main

@@ -21,7 +21,7 @@ public class Hero extends Character
     }
 
     public Hero(){
-        name = "Gregoonitoor";
+       super("Gregonitor");
     }
 
     Ring[] rings = new Ring[2];
@@ -55,9 +55,7 @@ public class Hero extends Character
     rings[index] = ring;
 }
 
-
-    //Methodes 
-    public int attackWith(Weapon weapon)
+/*public int attackWith(Weapon weapon)
     {
         if(weapon.isBroken()) return 0;
         else
@@ -70,7 +68,8 @@ public class Hero extends Character
             return degat;
         }
 
-    }
+    } */
+    //Methodes 
 
     public void setArmoItem(ArmorItem piece_armure, int slot){
         if(slot < 1 || slot > MAX_ARMOR_PIECES)
@@ -136,6 +135,7 @@ public class Hero extends Character
         return getTotalArmor();
     }
 
+    @Override
     public float computeBuff(){
         float compteur = 0;
         for(int i = 0; i < rings.length; i++){

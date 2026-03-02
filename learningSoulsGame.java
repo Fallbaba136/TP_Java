@@ -4,18 +4,22 @@ import java.util.Random;
 import java.util.Scanner;
 
 import lsg.armor.*;
-import lsg.buffs.rings.RingOfDeath;
-import lsg.buffs.rings.RingOfSwords;
 import lsg.buffs.talismans.Talisman;
 import lsg.characters.Character;
 import lsg.characters.Hero;
 import lsg.characters.Lycanthrope;
 import lsg.characters.Monster;
-import lsg.weapons.Claw;
-import lsg.weapons.Sword;
-import java.util.random.*;
+//import java.util.Random;
 import lsg.buffs.*;
 import lsg.buffs.rings.*;
+import lsg.weapons.*;
+import lsg.consumables.*;
+import lsg.consumables.drinks.Coffee;
+import lsg.consumables.drinks.Whisky;
+import lsg.consumables.drinks.Wine;
+import lsg.consumables.food.Americain;
+import lsg.consumables.food.Food;
+import lsg.consumables.food.Hamburger;
 
 public class LearningSoulsGame{
 	
@@ -67,6 +71,35 @@ public class LearningSoulsGame{
 		fight1v2() ;
 		
 	}
+
+    private void createEchaustedHero(){
+        Hero hero = new Hero("Gregooninator");
+        hero.setLife(1);
+        hero.setStamina(0);
+        Weapon weapon = new Weapon("Grosse Arme", 0, 0, 1000, 100);
+        System.out.println("Create exhausted hero : ");
+        System.out.println(hero);
+        //System.out.println(weapon);
+    }
+    
+private void aTable() {
+    MenuBestOfV3 menu = new MenuBestOfV3();
+    Hero hero = new Hero("Gregoonianator"); 
+     hero.setLife(100);      
+    hero.setStamina(50); 
+    
+    System.out.println(hero + "\n");
+    
+    for (Consumable c : menu) {
+        String action = (c instanceof Food) ? "eats" : "drinks";
+        System.out.println(hero.getName() + " " + action + " " + c);
+        
+        hero.use(c);  
+        
+        System.out.println(hero);
+        System.out.println("Après utilisation : " + c + "\n");
+    }
+}
 
 
 	private void fight1v1(){
@@ -247,8 +280,12 @@ public class LearningSoulsGame{
 	}
 
 	public static void main(String[] args) {
-		new LearningSoulsGame().play_v1(); ;
-
-	}
-
+    LearningSoulsGame game = new LearningSoulsGame();
+    
+    System.out.println("=== Héros épuisé ===");
+    game.createEchaustedHero();    // life=1, stamina=0
+    
+    System.out.println("\n=== Test du menu ===");
+    game.aTable();                 // Le héros devrait maintenant augmenter ses stats
+}
 }

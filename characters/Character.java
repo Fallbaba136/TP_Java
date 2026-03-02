@@ -5,6 +5,10 @@ import lsg.helper.Dice;
 import lsg.weapons.Weapon;
 
 import java.math.*;
+import lsg.consumables.Consumable;
+import lsg.consumables.drinks.*;
+import lsg.consumables.food.*;
+import lsg.consumables.repair.*;
 
 
 
@@ -24,10 +28,16 @@ public abstract class Character {
     private Weapon weapon;      // arme équipée
     private Dice dice101 = new Dice(101);
 
+    public static final String LIFE_STAT_STRING = "LIFE";
+    public static final String STAM_STAT_STRING = "STAMINA";
+    public static final String PROT_STAT_STRING = "PROTECTION";
+    public static final String BUFF_STAT_STRING = "BUFF";
+
 
 // -----------------------------------------
 //      GETTERS / SETTERS
 // -----------------------------------------
+
     public String getName() { return name; }
     public void setName(String name){  this.name = name;}
 
@@ -54,24 +64,65 @@ public abstract class Character {
     public Character(String name)  {
          this.name = name; 
         }
-    public Character() {name = "Gregooninator";}
+    public Character() {
+        name = "Gregooninator";
+        this.maxLife = 100;      // Initialisation dans la classe parente
+        this.maxStamina = 100;
+        this.life = maxLife;
+        this.stamina = 50;
+    }
 
 
     // -----------------------------------------
-    //      AFFICHAGE / ETAT
+    //      Methode
     // -----------------------------------------
+    
+private void drink(Drink soda) {
+    int pointGagne = soda.use();
+    System.out.println("Points reçus dans drink: " + pointGagne);  // DEBUG
+    System.out.println("Stamina avant: " + stamina);               // DEBUG
+    stamina = Math.min(stamina + pointGagne, maxStamina);
+    System.out.println("Stamina après: " + stamina);               // DEBUG
+}
+    private void eat(Food food){
+        int pointGagne = food.use();
+        life = Math.min(life + pointGagne, maxLife);
+    }
+
+    public void use(Consumable consumable){
+        if (consumable instanceof Drink) { // appelle des fontions
+             drink((Drink) consumable); // Conversion de consumable (casting)
+        }else if (consumable instanceof Food) {
+           eat((Food) consumable);
+        }
+        else if (consumable instanceof RepairKit) {
+            repairWeaponWith((RepairKit) consumable);
+        }
+    }
+private void repairWeaponWith(RepairKit kit)
+    { 
+        if(this.weapon != null)
+        {   
+         if(kit.getCapacity() > 0){
+                this.weapon.repairWith(kit);
+                System.out.println(this.name + " Repair " + this.weapon + " with " + kit);
+                }
+        }
+
+    }
+
 @Override
     public String toString() {
     return String.format(
         Locale.US,
-        "[%-10s] %-20s LIFE: %-5d STAMINA: %-5d PROTECTION: %.2f (%s), BUFF: %f",
+        "[%-10s] %-20s %s: %-5d %s: %-5d %s: %.2f (%s), %s: %f",
         getClass().getSimpleName(),
         name,
-        life,
-        stamina,
-        computeProtection(),
+       LIFE_STAT_STRING, life,
+        STAM_STAT_STRING, stamina,
+        PROT_STAT_STRING, computeProtection(),
         Alive_Dead(),
-        computeBuff()
+        BUFF_STAT_STRING, computeBuff()
     );
 }
     // Si le personnage est encore en vie 
@@ -171,4 +222,18 @@ public abstract class Character {
 
        public abstract float computeProtection();
        public abstract float computeBuff();
+
+       public static void main(String[] args) {
+        Character dragon = new Hero("Gregooninator");
+        Whisky whisky = new Whisky("12 years old Oban", 150, null);
+        Hamburger hamburger = new Hamburger("Uncle Greg's spicy Maroilles burger", 40, null);
+        System.out.println(dragon.getName() + "\t drinks" + "\t" +  whisky);
+        System.out.println();
+         System.out.println(dragon.getName() + "\t eats" + "\t" +  hamburger);
+         System.out.println();
+         Weapon weapon = new Weapon("Grosse arme", 0, 0; 1000, 99);
+         dragon.setWeapon(weapon);
+         RepairKit kit = new RepairKit();
+         dragon.repairWeaponWith(kit);
+       }
 }
