@@ -24,7 +24,7 @@ import lsg.consumables.food.Hamburger;
 public class LearningSoulsGame{
 	
 	Scanner scanner = new Scanner(System.in) ;
-	
+	public static String  BULLET_POINT = "\u2219";
 	Hero hero ;
 	Monster monster;
 	Monster monster2;
@@ -33,6 +33,8 @@ public class LearningSoulsGame{
 
 	private void init(){
 		hero = new Hero() ;
+        Consumable hamburger = new Hamburger("Uncle Greg's spicy Maroilles burger", 40, null);
+        hero.setConsumable(hamburger);
 		hero.setLife(50);
 		hero.setStamina(50);
 		hero.setWeapon(new Sword());
@@ -61,6 +63,12 @@ public class LearningSoulsGame{
         
 	}
 
+    public void title(){
+        System.out.println("\t ======================= \t");
+      System.out.println("# \t THE LEARNING SOULS GAME \t \n");
+      System.out.println("\t ======================= \t");
+    }
+
 	private void play_v1(){
 		init() ;
 		fight1v1() ;
@@ -83,7 +91,7 @@ public class LearningSoulsGame{
     }
     
 private void aTable() {
-    MenuBestOfV3 menu = new MenuBestOfV3();
+    MenuBestOfV4 menu = new MenuBestOfV4();
     Hero hero = new Hero("Gregoonianator"); 
      hero.setLife(100);      
     hero.setStamina(50); 
@@ -93,51 +101,61 @@ private void aTable() {
     for (Consumable c : menu) {
         String action = (c instanceof Food) ? "eats" : "drinks";
         System.out.println(hero.getName() + " " + action + " " + c);
-        
         hero.use(c);  
-        
         System.out.println(hero);
         System.out.println("Après utilisation : " + c + "\n");
     }
 }
 
 
-	private void fight1v1(){
-
-		
-		refresh();
-		
-		Character agressor = hero ;
-		Character target = monster ;
-		String action = null ; // TODO sera effectivement utilise dans une autre version
-		int attack, hit ;
-		Character tmp ;
-		while(hero.isAlive() && monster.isAlive()){ // ATTENTION : boucle infinie si 0 stamina...
-			
-			System.out.println();
-			
-			System.out.println("Hit enter key for next move > ");
-			action = scanner.nextLine() ;
-			
-			attack = agressor.attack() ;
-			hit = target.getHitWith(attack);
-			System.out.printf("%s attacks %s with %s (ATTACK:%d | DMG : %d)", agressor.getName(), target.getName(), agressor.getWeapon().getName(), attack, hit
-        );
-			
-			System.out.println();
-			refresh();
-			
-			tmp = agressor ;
-			agressor = target ;
-			target = tmp ;
-			
-		}
-		
-		Character winner = (hero.isAlive()) ? hero : monster ;
-		System.out.println();
-		System.out.println("--- " + winner.getName() + " WINS !!! ---");
-		
-	}
+private void fight1v1() {
+    refresh();
+    
+    Character agressor = hero;
+    Character target = monster;
+    int attack, hit;
+    Character tmp;
+    
+    while(hero.isAlive() && monster.isAlive()) {
+        System.out.println();
+        
+        // DÉBUT des modifications
+        if (agressor == hero) {  // Tour du héros
+            int choix;
+            do {
+                System.out.println("Choix : 1 - Attaquer | 2 - Consommer");
+                System.out.print("> ");
+                choix = scanner.nextInt();
+            } while (choix != 1 && choix != 2);
+            
+            if (choix == 1) {
+                attack = agressor.attack();
+            } else {
+                agressor.consume();
+                attack = 0;  // Pas d'attaque ce tour
+            }
+        } else {  // Tour du monstre (automatique)
+            attack = agressor.attack();
+        }
+        // FIN des modifications
+        
+        hit = target.getHitWith(attack);
+        System.out.printf("%s attacks %s with %s (ATTACK:%d | DMG : %d)",
+            agressor.getName(), target.getName(),
+            agressor.getWeapon().getName(), attack, hit);
+        
+        System.out.println();
+        refresh();
+        
+        tmp = agressor;
+        agressor = target;
+        target = tmp;
+    }
+    
+    Character winner = (hero.isAlive()) ? hero : monster;
+    System.out.println();
+    System.out.println("--- " + winner.getName() + " WINS !!! ---");
+}
 
 	private void fight1v2(){
     refresh();
@@ -277,15 +295,19 @@ private void aTable() {
 	private void refresh(){
 		hero.printStats();
 		monster.printStats();
+       System.out.println(hero.getWeapon());
+       System.out.println(hero.getConsumable());
 	}
 
 	public static void main(String[] args) {
     LearningSoulsGame game = new LearningSoulsGame();
+    game.title();
+    game.init();
+    game.fight1v1();
+    //System.out.println("=== Héros épuisé ===");
+    //game.createEchaustedHero();    // life=1, stamina=0
     
-    System.out.println("=== Héros épuisé ===");
-    game.createEchaustedHero();    // life=1, stamina=0
-    
-    System.out.println("\n=== Test du menu ===");
-    game.aTable();                 // Le héros devrait maintenant augmenter ses stats
+    //System.out.println("\n=== Test du menu ===");
+    //game.aTable();                 // Le héros devrait maintenant augmenter ses stats
 }
 }

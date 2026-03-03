@@ -1,10 +1,12 @@
 package lsg.weapons;
 import lsg.helper.*;
 import java.math.*;
+
+import lsg.bags.Collectible;
 import lsg.consumables.repair.*;
 //import lsg.characters.*;
 
-public class Weapon 
+public class Weapon implements Collectible 
 {
     //attributs
     protected String name;
@@ -35,10 +37,11 @@ public class Weapon
     public int getMaxDamage() {return maxDamage;}
     public int getStamCost() {return stamCost;}
     public int getDurability() {return durability;}
-    private void setDurability(int durability) {this.durability = durability;}
 
+    public void setDurability(int durability) {this.durability = durability;}
     public void setMinDamage(int minDamage){this.minDamage = minDamage;}
     public void setMaxDamage(int maxDamage){this.maxDamage = maxDamage;}
+    public void setStamCost(int stamCost){this.stamCost = stamCost;}
 
     // les methodes 
     public void use() {
@@ -50,10 +53,15 @@ public class Weapon
         if (durability <= 0) return true;
         else return false;
     }
+     public void repairWith(RepairKit kit){
+        int reparation = kit.use();
+        durability += reparation;
+    }
+    @Override
     public String toString()
     {
          return String.format(
-        "[%-10s] %-20s min: %-5d max: : %-5d stam: %-5d %s: %-5d",
+        "[%-5s] %s min: %d max: : %5d stam: %5d %s: %5d",
         getClass().getSimpleName(),
         name,
         minDamage,
@@ -63,10 +71,9 @@ public class Weapon
     );
     }
 
-    public void repairWith(RepairKit kit){
-        int reparation = kit.use();
-        durability += reparation;
-    }
+   public int getWeight(){
+    return 2;
+   }
 
     //main
     public static void main(String[] args)

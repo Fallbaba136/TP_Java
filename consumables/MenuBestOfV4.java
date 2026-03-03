@@ -9,6 +9,7 @@ import lsg.consumables.drinks.Whisky;
 import lsg.consumables.drinks.Wine;
 import lsg.consumables.food.Americain;
 import lsg.consumables.food.Hamburger;
+import lsg.consumables.repair.*;
 
 public class MenuBestOfV4 extends LinkedHashSet<Consumable>{
     /**
@@ -23,9 +24,10 @@ public class MenuBestOfV4 extends LinkedHashSet<Consumable>{
         add(new Americain("Friterie 2000's Best of the Best", 3000, null));
         add(new Coffee("Hot Grandmother Coffee", 10, null));
         add(new Whisky("12 years old Oban", 150, null));
+        add(new RepairKit());
     }
       public String toString(){
-        String result = "MenuBestOfV3 : \n";
+        String result = "MenuBestOfV4 : \n";
        for(Consumable c : this){ // Parcour possible pour un 
             result += c + "\n";
        }

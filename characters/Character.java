@@ -28,6 +28,7 @@ public abstract class Character {
     private Weapon weapon;      // arme équipée
     private Dice dice101 = new Dice(101);
 
+
     public static final String LIFE_STAT_STRING = "LIFE";
     public static final String STAM_STAT_STRING = "STAMINA";
     public static final String PROT_STAT_STRING = "PROTECTION";
@@ -58,18 +59,32 @@ public abstract class Character {
     public int getStamina(){ return stamina;}
     public void setStamina(int stamina){ this.stamina = stamina;}
 
+    //===============
+    //New Attribut 
+    //===============
+
+    protected Consumable consumable;
+
+    public Consumable getConsumable(){return consumable;}
+    public void setConsumable(Consumable consumable){this.consumable = consumable;}
+    
+    public void consume(){
+        use(this.consumable);
+    }
+
+
     // -----------------------------------------
     //      CONSTRUCTEURS
     // -----------------------------------------
     public Character(String name)  {
-         this.name = name; 
-        }
-    public Character() {
-        name = "Gregooninator";
+        this.name = name; 
         this.maxLife = 100;      // Initialisation dans la classe parente
         this.maxStamina = 100;
         this.life = maxLife;
         this.stamina = 50;
+        }
+    public Character() {
+       this("Gregooninator");
     }
 
 
@@ -79,15 +94,13 @@ public abstract class Character {
     
 private void drink(Drink soda) {
     int pointGagne = soda.use();
-    System.out.println("Points reçus dans drink: " + pointGagne);  // DEBUG
-    System.out.println("Stamina avant: " + stamina);               // DEBUG
     stamina = Math.min(stamina + pointGagne, maxStamina);
-    System.out.println("Stamina après: " + stamina);               // DEBUG
 }
-    private void eat(Food food){
-        int pointGagne = food.use();
-        life = Math.min(life + pointGagne, maxLife);
-    }
+private void eat(Food food) {
+    int pointGagne = food.use();
+    life = Math.min(life + pointGagne, maxLife);
+}
+
 
     public void use(Consumable consumable){
         if (consumable instanceof Drink) { // appelle des fontions
@@ -99,17 +112,23 @@ private void drink(Drink soda) {
             repairWeaponWith((RepairKit) consumable);
         }
     }
-private void repairWeaponWith(RepairKit kit)
+
+   private void repairWeaponWith(RepairKit kit)
     { 
         if(this.weapon != null)
-        {   
-         if(kit.getCapacity() > 0){
-                this.weapon.repairWith(kit);
-                System.out.println(this.name + " Repair " + this.weapon + " with " + kit);
+            {   
+                weapon.setMinDamage(0);
+                weapon.setMaxDamage(0);
+                weapon.setStamCost(1000);
+                weapon.setDurability(99);
+                if(kit.getCapacity() > 0){
+                 this.weapon.repairWith(kit);
+                System.out.println(this.name + " Repairs " + weapon.getName() + " ( " + "min:" + weapon.getMinDamage() + " max:" + weapon.getMaxDamage() + " stam:"+ weapon.getStamCost() + " dur:" + weapon.getDurability() +" ) " + " with " + kit);
                 }
-        }
+            }
 
     }
+
 
 @Override
     public String toString() {
@@ -231,7 +250,7 @@ private void repairWeaponWith(RepairKit kit)
         System.out.println();
          System.out.println(dragon.getName() + "\t eats" + "\t" +  hamburger);
          System.out.println();
-         Weapon weapon = new Weapon("Grosse arme", 0, 0; 1000, 99);
+         Weapon weapon = new Weapon("Grosse arme", 0, 0, 1000, 99);
          dragon.setWeapon(weapon);
          RepairKit kit = new RepairKit();
          dragon.repairWeaponWith(kit);

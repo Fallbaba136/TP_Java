@@ -1,6 +1,8 @@
 package lsg.consumables;
 
-public class Consumable {
+import lsg.bags.Collectible;
+
+public class Consumable implements Collectible{
 
     // Attributs
     protected String name;
@@ -36,6 +38,10 @@ public class Consumable {
         getName(),
         getCapacity()
         );
+    }
+
+    public int getWeight(){
+        return 1;
     }
 
     public static void main(String[] args) {
