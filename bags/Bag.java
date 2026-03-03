@@ -25,13 +25,13 @@ public class Bag {
     //Accessibilités
     public int getCapacity(){return capacity;}
     public int getWeight(){return weight;}
-     public void setWeight(int weight){this.weight = weight;}
 
     //Methodes
     public void push(Collectible item){
         int disponible = capacity - weight;
         if (disponible >= item.getWeight()) {
             items.add(item);
+            weight += item.getWeight();
         }
     }
 
@@ -57,6 +57,10 @@ public class Bag {
         return tab;
     }
 
+    public static void transfer(Bag from, Bag into){
+        
+    }
+
     @Override
     public String toString(){
         return String.format("Bag [ %d items %d/%d kg ] \n ",
@@ -67,8 +71,7 @@ public class Bag {
     }
 
 public static void main(String[] args) {
-    Bag bag = new MediumBag(10);
-    bag.setWeight(10);
+    Bag bag = new SmallBag(10);
     Collectible gun = new ShotGun();
     Collectible leggings = new DragonSlayerLeggings();
     Collectible ringed = new RingedKnightArmor();
@@ -82,6 +85,7 @@ public static void main(String[] args) {
     }
 
     bag.pop(leggings);
+
     System.out.println(" \n Apres suppresion : " + bag);
      for(Collectible c: bag.items){
         System.out.println(c + " [ " + c.getWeight() + " kg]");
