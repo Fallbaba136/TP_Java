@@ -2,6 +2,7 @@ package lsg.characters;
 import java.util.Locale;
 
 import lsg.helper.Dice;
+import lsg.weapons.ShotGun;
 import lsg.weapons.Weapon;
 
 import java.math.*;
@@ -9,6 +10,9 @@ import lsg.consumables.Consumable;
 import lsg.consumables.drinks.*;
 import lsg.consumables.food.*;
 import lsg.consumables.repair.*;
+import lsg.armor.DragonSlayerLeggings;
+import lsg.armor.RingedKnightArmor;
+import lsg.bags.*;
 
 
 
@@ -59,9 +63,9 @@ public abstract class Character {
     public int getStamina(){ return stamina;}
     public void setStamina(int stamina){ this.stamina = stamina;}
 
-    //===============
-    //New Attribut 
-    //===============
+    //=======================
+    //New Attribut Consumable
+    //=======================
 
     protected Consumable consumable;
 
@@ -72,6 +76,77 @@ public abstract class Character {
         use(this.consumable);
     }
 
+    //=================
+    //New Attribut Bag
+    //=================
+    protected Bag bag;
+
+    public void pickUp(Collectible item){
+            bag.push(item);
+    }
+
+    public Collectible pullOut(Collectible item){
+        return bag.pop(item);
+    }
+
+    public void printBag(){
+        Collectible gun = new ShotGun();
+        Collectible leggings = new DragonSlayerLeggings();
+        Collectible ringed = new RingedKnightArmor();
+        bag.push(gun);
+        bag.push(leggings);
+        bag.push(ringed);
+        System.out.println("Sac 1 :");
+        System.out.println(bag);
+        for(Collectible c: bag.getItems()){
+        System.out.println(c + " [ " + c.getWeight() + " kg]");
+    }
+    }
+
+    public int getBagCapacity(){
+        return bag.getCapacity();
+    }
+    public int getBagWeight(){
+        return bag.getWeight();
+    }
+    public Collectible[] getBagItems(){
+        return bag.getItems();
+    }
+
+    public Bag setBag(Bag bagSecond){
+        Bag.transfer(bag, bagSecond);
+        this.bag = bagSecond;
+        /**
+         * getClass().getSimpleName() retourne le nom de la classe fille 
+         * réelle, pas celui de la classe parente !
+         */
+        System.out.println(getName()+ " changes " + 
+            bag.getClass().getSimpleName() + " for " +
+                 bagSecond.getClass().getSimpleName());
+                 return bag;
+    }
+
+    public void equip(Weapon weapon){
+        if (bag.contains(weapon)) {
+            setWeapon(weapon);
+            bag.pop(weapon);
+            System.out.println(getName() + " pulls " + weapon + " and equips it !");
+        }
+}
+
+    public void equip(Consumable consumable){
+        if (bag.contains(consumable)) {
+            setConsumable(consumable);
+            bag.pop(consumable);
+            System.out.println(getName() + " pulls " + consumable + " and equips it !");
+        }
+    }
+
+    //-------------------------
+    // Fast recharging
+    //-------------------------
+
+    
 
     // -----------------------------------------
     //      CONSTRUCTEURS
@@ -86,7 +161,6 @@ public abstract class Character {
     public Character() {
        this("Gregooninator");
     }
-
 
     // -----------------------------------------
     //      Methode
@@ -128,6 +202,7 @@ private void eat(Food food) {
             }
 
     }
+
 
 
 @Override

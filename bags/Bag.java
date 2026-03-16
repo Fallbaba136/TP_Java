@@ -58,7 +58,12 @@ public class Bag {
     }
 
     public static void transfer(Bag from, Bag into){
-        
+        //Création d'une item de copie 
+        Collectible[] copie = from.getItems();
+
+           for(Collectible c: copie){
+                into.push(c);
+           }
     }
 
     @Override
@@ -67,8 +72,7 @@ public class Bag {
          items.size(),
          weight,
          capacity
-        );
-    }
+        ); }
 
 public static void main(String[] args) {
     Bag bag = new SmallBag(10);
@@ -79,17 +83,36 @@ public static void main(String[] args) {
     bag.push(gun);
     bag.push(leggings);
     bag.push(ringed);
+    System.out.println("Sac 1 :");
     System.out.println(bag);
     for(Collectible c: bag.items){
         System.out.println(c + " [ " + c.getWeight() + " kg]");
     }
 
-    bag.pop(leggings);
+    Bag bag2 = new Bag(5);
+    System.out.println("\nSac 2 :");
+    System.out.println(bag2);
+    for(Collectible c: bag2.items){
+        System.out.println(c + " [ " + c.getWeight() + " kg]");
+    }
 
+    System.out.println("\nSac 2 après transfers :");
+    Bag.transfer(bag, bag2);
+    System.out.println(bag2);
+    for(Collectible c: bag.items){
+        System.out.println(c + " [ " + c.getWeight() + " kg]");
+    }
+
+    System.out.println("\nSac 1 après transfert : ");
+    System.out.println(bag);
+
+    /* 
+    bag.pop(leggings);
     System.out.println(" \n Apres suppresion : " + bag);
      for(Collectible c: bag.items){
         System.out.println(c + " [ " + c.getWeight() + " kg]");
     }
+        */
 }
 
 }

@@ -2,6 +2,7 @@ package lsg.characters;
 
 import lsg.characters.Character;
 import lsg.characters.Monster;
+import lsg.consumables.Consumable;
 import lsg.weapons.*;
 import lsg.armor.*;
 import lsg.helper.*;
@@ -69,7 +70,10 @@ public class Hero extends Character
         }
 
     } */
-    //Methodes 
+
+    //========
+    //Methodes
+    //======== 
 
     public void setArmoItem(ArmorItem piece_armure, int slot){
         if(slot < 1 || slot > MAX_ARMOR_PIECES)
@@ -128,6 +132,22 @@ public class Hero extends Character
             }
         }
         return armure;
+    }
+
+        public void equip(ArmorItem item, int slot){
+        if (bag.contains(item)) {
+            setArmoItem(item, slot);
+            bag.pop(item);
+            System.out.println(getName() + " pulls " + item.getName() + " and equips it !");
+        }
+}
+
+    public void equip(Ring ring, int slot){
+        if (bag.contains(ring)) {
+            setRing(ring, slot);
+            bag.pop(consumable);
+            System.out.println(getName() + " pulls " + ring.getName() + " and equips it !");
+        }
     }
 
     @Override
