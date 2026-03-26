@@ -142,10 +142,6 @@ public abstract class Character {
         }
     }
 
-    //-------------------------
-    // Fast recharging
-    //-------------------------
-
     
 
     // -----------------------------------------
@@ -157,6 +153,7 @@ public abstract class Character {
         this.maxStamina = 100;
         this.life = maxLife;
         this.stamina = 50;
+        this.bag = new SmallBag(10);
         }
     public Character() {
        this("Gregooninator");
@@ -203,6 +200,55 @@ private void eat(Food food) {
 
     }
 
+    //-------------------------
+    // Fast recharging
+    //-------------------------
+
+    private <T extends Consumable> T fastUseFirst(Class<T> type){ // retourne un methode de type T
+        for(Collectible item: bag.getItems()){
+            if (type.isInstance(item)) {
+                T consumable = type.cast(item); // cast: On converti item(Collectible) en T(Drink, Food, etc ..)
+                consumable.use();
+                return consumable;
+            }
+        }
+        return null;
+    }
+
+    public Drink fastDrink(){
+        Drink bu = fastUseFirst(Drink.class);
+         if (bu != null) {
+            System.out.println(this.name + "drinks Fast :\n");
+            System.out.println(this.name + " drink " + bu.toString());
+            System.out.println(this.name + " pulls out " + bu.toString());
+        }else{
+            System.out.println("Pas de boisson dans le sac");
+        }
+        return bu;
+    }
+
+    public Food fastEat(){
+        Food eat = fastUseFirst(Food.class);
+        if (eat != null) {
+            System.out.println(this.name + "eats Fast :\n");
+            System.out.println(this.name + " eats " + eat.toString());
+            System.out.println(this.name + " pulls out " + eat.toString());
+        }else{
+            System.out.println("Pas de nourriture dans le sac");
+        }
+        return eat;
+    }
+
+    public RepairKit fasRepairKit(){
+        RepairKit kit = fastUseFirst(RepairKit.class);
+         if (kit != null) {
+            System.out.println(this.name + "repair Fast :\n");
+            System.out.println(this.name + " repair " + kit.toString());
+        }else{
+            System.out.println("Pas de reparation de l'arme");
+        }
+        return kit;
+    }
 
 
 @Override

@@ -15,16 +15,19 @@ import lsg.buffs.rings.*;
 import lsg.weapons.*;
 import lsg.consumables.*;
 import lsg.consumables.drinks.Coffee;
+import lsg.consumables.drinks.Drink;
 import lsg.consumables.drinks.Whisky;
 import lsg.consumables.drinks.Wine;
 import lsg.consumables.food.Americain;
 import lsg.consumables.food.Food;
 import lsg.consumables.food.Hamburger;
+import lsg.consumables.repair.RepairKit;
+import lsg.bags.*;
 
 public class LearningSoulsGame{
 	
 	Scanner scanner = new Scanner(System.in) ;
-	public static String  BULLET_POINT = "\u2219";
+	public static final String GOSSE_ARME =  "Grosse Arme";
 	Hero hero ;
 	Monster monster;
 	Monster monster2;
@@ -84,7 +87,7 @@ public class LearningSoulsGame{
         Hero hero = new Hero("Gregooninator");
         hero.setLife(1);
         hero.setStamina(0);
-        Weapon weapon = new Weapon("Grosse Arme", 0, 0, 1000, 100);
+        Weapon weapon = new Weapon(GOSSE_ARME, 0, 0, 1000, 99);
         System.out.println("Create exhausted hero : ");
         System.out.println(hero);
         //System.out.println(weapon);
@@ -291,6 +294,113 @@ private void fight1v1() {
     }
 }
 
+private void testBag(){
+    Hero hero = new Hero("Gregooninator");
+    hero.setLife(1);
+    hero.setStamina(0);
+
+    System.out.println(hero + "\n");
+
+    ArmorItem blackWith = new BlackWitchVeil();
+    ArmorItem dragonSlayer = new DragonSlayerLeggings();
+    ArmorItem ringedKnight = new RingedKnightArmor();
+    Weapon gun = new ShotGun();
+
+    dragonSlayer.setArmorValue(10.2f);
+    ringedKnight.setArmorValue(14.99f);
+    gun.setMinDamage(6);
+    gun.setDurability(100);
+    gun.setStamCost(5);
+    gun.setMaxDamage(20);
+
+    System.out.println(hero.getName() + " picks up " + dragonSlayer);
+    System.out.println(hero.getName() + " picks up " + ringedKnight);
+    System.out.println(hero.getName() + " picks up " + gun + "\n");
+
+    Bag smallbag = new SmallBag(10);
+    smallbag.push(gun);
+    smallbag.push(dragonSlayer);
+    smallbag.push(ringedKnight); 
+
+    System.out.println("Bag : " + smallbag);
+
+   for(Collectible item: smallbag.getItems()){
+     System.out.println("\u2219 " + item + " [ " + item.getWeight() + " kg]");
+   }
+   System.out.println();
+   
+   System.out.println(hero.getName() + "changes SmallBag for MediumBag \n");
+
+   Bag mediumbag = new MediumBag(40);
+   smallbag.transfer(smallbag, mediumbag);
+   System.out.println("Bag : " + mediumbag);
+    for(Collectible item: mediumbag.getItems()){
+     System.out.println("\u2219 " + item + " [ " + item.getWeight() + " kg]");
+   }
+   System.out.println();
+
+    Consumable coffee = new Coffee("Hot Grandmother Coffee", 10, null);
+    Consumable hamburger = new Hamburger("Uncle Greg's spicy Maroilles burger", 40, null);
+    Consumable wh = new Whisky("12 years old Oban", 150, null);
+
+    RepairKit kit = new RepairKit();
+    RepairKit kit2 = new RepairKit();
+    kit.setCapacity(10);
+    kit2.setCapacity(10);
+
+    System.out.println(hero.getName() + " picks up " + coffee.toString());
+    System.out.println(hero.getName() + " picks up " + hamburger.toString());
+    System.out.println(hero.getName() + " picks up " + wh.toString());
+    System.out.println(hero.getName() + " picks up Repair Kit " + kit.toString());
+    System.out.println(hero.getName() + " picks up Repair Kit " + kit2.toString());
+    System.out.println();
+
+    mediumbag.push(coffee);
+    mediumbag.push(kit);
+    mediumbag.push(hamburger);
+    mediumbag.push(wh);
+    mediumbag.push(kit2);
+    hero.setBag(mediumbag);
+    System.out.println("BAG : " + mediumbag);
+     for(Collectible item: mediumbag.getItems()){
+     System.out.println("\u2219 " + item + " [ " + item.getWeight() + " kg]");
+   }
+   System.out.println();
+
+   System.out.println("---AVANT---");
+   System.out.println(hero);
+   hero.printArmor();
+
+   Weapon weapon = new Weapon(GOSSE_ARME, 0, 0, 1000, 99);
+   System.out.println(weapon);
+   System.out.println();
+
+  for(Collectible item: mediumbag.getItems()){
+     System.out.println("\u2219 " + item + " [ " + item.getWeight() + " kg]");
+   }
+   System.out.println();
+
+   System.out.println("---ACTION--");
+   hero.fastDrink();
+   System.out.println();
+   hero.fastEat();
+   System.out.println();
+   hero.fasRepairKit();
+   System.out.println();
+
+   System.out.println("--Apres--");
+   System.out.println(hero);
+   hero.printArmor();
+   System.out.println(weapon);
+
+   System.out.println("BAG : " + mediumbag);
+     for(Collectible item: mediumbag.getItems()){
+     System.out.println( "\u2219 " + item + " [ " + item.getWeight() + " kg]");
+   }
+
+
+}
+
 	
 	private void refresh(){
 		hero.printStats();
@@ -302,12 +412,7 @@ private void fight1v1() {
 	public static void main(String[] args) {
     LearningSoulsGame game = new LearningSoulsGame();
     game.title();
-    game.init();
-    game.fight1v1();
-    //System.out.println("=== Héros épuisé ===");
-    //game.createEchaustedHero();    // life=1, stamina=0
-    
-    //System.out.println("\n=== Test du menu ===");
-    //game.aTable();                 // Le héros devrait maintenant augmenter ses stats
+    game.init();    
+    game.testBag();
 }
 }

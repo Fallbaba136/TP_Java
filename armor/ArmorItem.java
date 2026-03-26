@@ -16,6 +16,7 @@ public class ArmorItem implements Collectible{
     // Accesseurs
     public String getName(){return name;}
     public float getArmorValue(){return armorValue;}
+    public void setArmorValue(float armorValue){this.armorValue = armorValue;}
 
     // Methode
     public String toString(){

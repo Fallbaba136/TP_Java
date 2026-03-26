@@ -133,6 +133,16 @@ public class Hero extends Character
         }
         return armure;
     }
+    public void printArmor() {
+    for (int i = 0; i < armor.length; i++) {
+        if (armor[i] != null) {
+            System.out.print(armor[i].getName() + " ");
+        } else {
+            System.out.print("empty ");
+        }
+    }
+    System.out.println("TOTAL:" + getTotalArmor());
+}
 
         public void equip(ArmorItem item, int slot){
         if (bag.contains(item)) {

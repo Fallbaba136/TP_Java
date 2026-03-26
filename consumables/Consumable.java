@@ -23,7 +23,7 @@ public class Consumable implements Collectible{
     public int getCapacity() {return capacity;}
     public String getStat() {return stat;}
 
-    public void setcapacity(int capacity){ this.capacity = capacity;}
+    public void setCapacity(int capacity){ this.capacity = capacity;}
 
     //Methode
    public int use(){
